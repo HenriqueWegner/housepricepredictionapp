@@ -9,6 +9,7 @@ geolocator = Nominatim(user_agent="housepriceapp")
 amenities = pd.read_csv("data/amenities_df.csv")
 
 app = Flask(__name__)
+app.config['DEBUG'] = True
 app.secret_key = 'ahsuyafstfatrfshahjhd'
 
 
