@@ -22,7 +22,12 @@ def predict():
 
     address = request.form["address"]
     location = geolocator.geocode(address)
-
+    latitude = 0
+    longitude = 0
+    new_house = 0
+    second_hand_house = 0
+    VAT = 0
+    
     if location is None:
         flash('Unfortunately we could not find that address. Please enter another one: ')
         return(redirect(url_for('home')))
@@ -41,7 +46,7 @@ def predict():
             if house_type == "new-house":
                 new_house = 1
                 second_hand_house = 0
-                VAT = 0
+                VAT = 1
 
             else:
                 new_house = 0
