@@ -7,10 +7,10 @@ from geopy.geocoders import Nominatim
 
 geolocator = Nominatim(user_agent="housepriceapp")
 amenities = pd.read_csv("data/amenities_df.csv")
-
+SECRET_KEY = app.config.get("SECRET_KEY")
 app = Flask(__name__)
 app.config['DEBUG'] = True
-app.secret_key = 'ahsuyafstfatrfshahjhd'
+app.secret_key = SECRET_KEY
 
 
 @app.route("/")
