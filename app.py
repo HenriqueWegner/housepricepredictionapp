@@ -20,28 +20,26 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-
-    address = request.form["address"]
-    location = geolocator.geocode(address)
-    latitude = 0
-    longitude = 0
-    new_house = 0
-    second_hand_house = 0
-    VAT = 0
     
+    #Gets the address from the form.
+    address = request.form["address"]
+    #Gets info from the geolocator API and returns info about the address (latitude and longitude)
+    location = geolocator.geocode(address)
+    #If the location is not valid, shows a message and returns the user to the main page.
     if location is None:
         flash('Unfortunately we could not find that address. Please enter another one: ')
         return(redirect(url_for('home')))
+    #Else get the location latitude and longitude.
     else:
         latitude = float(location.latitude)
         longitude = float(location.longitude)
-
+        #Latitude and longitude needs to be in the right range, if it not redirect the user to the menu again and asks for a Dublin address.
         if latitude > 54 or latitude < 53 or longitude > -6 or longitude < -7:
             flash(
                 'We found an address outside of Dublin. Please enter a Dublin address: ')
             return(redirect(url_for('home')))
+        #Else it gets the form value for the house type and set the variables.
         else:
-
             house_type = request.form['house-type']
 
             if house_type == "new-house":
@@ -102,14 +100,14 @@ def predict():
 
             # Predicting the value.
             prediction = random_forest_loaded_model.predict(df)
-
+            #Creates the map with the center on the entered coordinates (center of Dublin).
             map_pickup = folium.Map(location=[53.347409, -6.272184])
-
+            #Adds a marker with the location coordinates and adds the prediction value to the market.
             folium.Marker(location=[latitude, longitude],
                           popup="Price: € " + str(prediction[0])).add_to(map_pickup)
-
+            #Save the map to the templates folder.
             map_pickup.save('templates/final_map_test.html')
-
+            #Render the map.
             return render_template("final_map_test.html")
 
 
